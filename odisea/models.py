@@ -7,12 +7,12 @@ class Article(models.Model):
     author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="articles")
     title = models.CharField(max_length=60)
     content = models.TextField()
-    category = models.CharField(max_length=150, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=150, choices=CATEGORY_CHOICES, default=None)
     likes =  models.ManyToManyField("Reader", related_name="liked_posts", blank=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return self.content
     
     def likes(self):
         return self.likes
@@ -51,7 +51,7 @@ class Reader(AbstractUser):
         return f"{self.first_name} {self.last_name}"
     
     def following(self):
-        return self.following
+        return self.following.all()
 
 class Author(Reader):
     bio = models.TextField()
@@ -63,8 +63,8 @@ class Author(Reader):
             ("new", "Can view the new page and create blogs there."),
         ]
 
-    def articles(self):
-        return self.articles
+    def get_articles(self):
+        return self.articles.all()
 
-    def followers(self):
-        return self.followers
+    def get_followers(self):
+        return self.followers.all()
