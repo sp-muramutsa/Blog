@@ -1,0 +1,26 @@
+{% extends "odisea/layout.html" %}
+{% block body %}
+    <div class="container-fluid mt-5 d-flex flex-column">
+        {% for article in articles %}
+            <div class="card flex-fill mb-4 slim-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text flex-grow-1">
+                        {{ article.content }}
+                    </p>
+                    <div class="mt-auto">
+                        <p class="card-text">
+                            <small class="text-muted">Written on: {{ article.updated_at|date:"F j, Y, g:i a" }}</small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Author: <a href="{% url 'author' article.author.username %}">{{ article.author.username }}</a></small>
+                        </p>
+                        <a href="{% url 'article' article.id %}" class="btn btn-info">Read More</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No articles available.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,176 @@
+/* GENERAL */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+.content {
+    padding: 10px;
+    margin-left: 7%;
+    margin-top: 3%;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #DDE1E4;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* TRANSITION */
+.bi-book-half {
+    color: #0dcaf0;
+}
+
+a, .btn {
+    transition: all 300ms ease;
+}
+
+/* Desktop navigation */
+nav,
+.nav-links {
+    display: flex;
+}
+
+.desktop-nav {
+    justify-content: space-around;
+    align-items: center;
+    height: 8vh;
+    color: #dfe4dd;
+}
+
+.nav-links .nav-link {
+    color: #000;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+/* Styling for active link with increased specificity */
+.nav-links .nav-link.active {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.nav-links i 
+{
+    color: #0dcaf0;
+}
+
+/* Adjusting the gap between links */
+.nav-links {
+    gap: 2rem;
+    list-style: none;
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.navbar-brand {
+    font-size: 1.85rem;
+}
+
+.left-links {
+    margin-left: 10%;
+}
+
+a 
+{
+    color: #0dcaf0;
+    text-decoration: none;
+}
+
+a:hover 
+{
+    color: #ffc107;
+    text-decoration-style: solid;
+}
+
+.logo:hover 
+{
+    cursor: default;
+}
+
+footer {
+    clear: both;
+    background-color: #0dcaf0;
+    padding: 20px;
+    margin-top: 90px;
+    text-align: center;
+    height: 100px;
+    overflow: auto;
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    right: 0; 
+}
+
+footer p {
+    margin-top: 10px;
+    color: grey;
+    text-decoration-style: solid;
+    font-size: 14px;
+}
+
+.navigation-logo {
+    width: 50px;
+    height: auto;
+}
+
+.box-container 
+{
+    border: 2px solid #0dcaf0;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 45px;
+    box-shadow: 0 2px 4px  #0dcaf0;
+    background-color: whitesmoke; 
+}
+
+button, .btn
+{
+    border-radius: 35px;
+    margin: 15px;
+}
+
+button, .btn:hover
+{
+    color:  #ffc107;
+}
+
+.form-group
+{
+    padding: 10px;
+    margin-right: 35%;
+}
+
+.form-group input
+{
+    border-radius: 35px;
+    border-color:  #ffc107;
+    border-style: solid;
+}
+
+
+.form-control:focus 
+{
+    box-shadow: 0 0 0 0.2rem #0dcaf0;
+} 
+
+.form-control 
+{
+    border-radius: 25px;
+
+}
+
+
+.form-control textarea
+{
+    max-height: 60%;
+    max-width: 70%;
+}

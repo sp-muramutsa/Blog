@@ -1,0 +1,13 @@
+{% extends "odisea/layout.html" %}
+{% block body %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <p class="card-text">
+                {{ article.content }}
+            <p class="card-text">
+                <small class="text-muted">Written on: {{ article.updated_at|date:"F j, Y, g:i a" }}</small>
+            </p>
+    </div>
+{% endif %}
+{% endblock %}

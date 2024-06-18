@@ -1,0 +1,33 @@
+{% extends "odisea/layout.html" %}
+{% block body %}
+<div class="container mt-5">
+    <h2>{{ author.first_name }} {{ author.last_name }}</h2>
+    <div class="box-container">
+        <p>{{ author.bio }}</p>
+    </div>
+</div>
+<div class="container mt-5">
+    {% for article in articles %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">
+                    {{ article.content }}
+                <p class="card-text">
+                    <small class="text-muted">Written on: {{ article.updated_at|date:"F j, Y, g:i a" }}</small>
+                </p>
+                <a href="{% url 'article' article.id %}" class="btn btn-info">Read More</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No articles available.</p>
+    {% endfor %}
+</div>
+
+{% if user_is_author %}
+<div class="container mt-4">
+    <button type="button" class="btn btn-warning">Edit Profile</button>
+    <button type="button" class="btn btn-info">New Article</button>
+</div>
+{% endif %}
+{% endblock %}

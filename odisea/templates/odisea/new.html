@@ -1,0 +1,10 @@
+{% extends "odisea/layout.html" %}
+{% block body %}
+    <div class="container mt-5">
+        <form method="POST" action="{% url 'new' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-info">Post Article</button>
+        </form>
+    </div>
+{% endblock %}
