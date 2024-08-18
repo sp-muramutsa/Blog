@@ -1,57 +1,31 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django import forms
 from .choices import CATEGORY_CHOICES
+from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 
-class Article(models.Model):
-    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="articles")
-    title = models.CharField(max_length=60)
-    content = models.TextField()
-    category = models.CharField(max_length=150, choices=CATEGORY_CHOICES, default=None)
-    likes =  models.ManyToManyField("Reader", related_name="liked_posts", blank=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
 
+class AbstractUserBase(AbstractUser):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+    
     def __str__(self):
-        return self.content
-    
-    def likes(self):
-        return self.likes
-    
-    def comments(self):
-        return self.comments 
+        return f"{self.first_name} {self.last_name}"
     
 
-class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments")
-    commenter = models.ForeignKey("Reader", on_delete=models.CASCADE)
-    content = models.TextField()
-    updated_at = models.DateTimeField(auto_now_add=True)
-    likes =  models.ManyToManyField("Reader", related_name="liked_comments", blank=True)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Comment by {self.author} on {self.post}'
-    
-    def like_count(self):
-        return self.likes.count()
-    
-    def reply_count(self):
-        return self.replies.count()
-
-
-class Reader(AbstractUser):
-    following = models.ManyToManyField("Author", symmetrical=False, related_name="followers", blank=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+class Reader(AbstractUserBase):
+    following = models.ManyToManyField("Author", related_name="followers", blank=True)
 
     class Meta:
         verbose_name = "Reader"
         verbose_name_plural = "Readers"
-
-    def str(self):
-        return f"{self.first_name} {self.last_name}"
     
-    def following(self):
+    def get_following(self):
         return self.following.all()
+
 
 class Author(Reader):
     bio = models.TextField()
@@ -68,3 +42,50 @@ class Author(Reader):
 
     def get_followers(self):
         return self.followers.all()
+
+
+class Article(models.Model):
+    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="articles")
+    title = models.CharField(max_length=150)
+    slug = models.SlugField(unique=True, blank=True)
+    content = models.TextField()
+    category = models.CharField(max_length=150, choices=CATEGORY_CHOICES, default="Personal")
+    likes = models.ManyToManyField("Reader", related_name="liked_posts", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.title)
+            if Article.objects.filter(slug=slug).exists():
+                slug = f'{slug}-{get_random_string(5)}'
+            self.slug = slug
+            super(Article, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.title
+    
+    def get_likes(self):
+        return self.likes.all()
+    
+    def get_comments(self):
+        return self.comments.all()
+    
+
+class Comment(models.Model):
+    article = models.ForeignKey("Article", on_delete=models.CASCADE, related_name="comments")
+    commenter = models.ForeignKey("Reader", on_delete=models.CASCADE)
+    content = models.TextField()
+    likes = models.ManyToManyField("Reader", related_name="liked_comments", blank=True)
+    parent = models.ForeignKey("self", null=True, blank=True, related_name="replies", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Comment by {self.commenter} on {self.article}"
+    
+    def likes_count(self):
+        return self.likes.count()
+    
+    def replies_count(self):
+        return self.replies.count()
