@@ -45,7 +45,7 @@ class Author(Reader):
 
 
 class Article(models.Model):
-    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="articles")
+    author = models.ForeignKey("Author", on_delete=models.CASCADE, related_name="articles", default=3)
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, blank=True)
     content = models.TextField()
@@ -56,11 +56,14 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = slugify(self.title)
+            # Generate initial slug
+            slug_base = slugify(self.title)
+            slug = slug_base
+            # Check if the slug is unique and modify it if necessary
             if Article.objects.filter(slug=slug).exists():
-                slug = f'{slug}-{get_random_string(5)}'
+                slug = f'{slug_base}-{get_random_string(5)}'
             self.slug = slug
-            super(Article, self).save(*args, **kwargs)
+        super(Article, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.title

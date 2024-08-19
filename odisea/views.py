@@ -12,6 +12,7 @@ from .serializers import ArticleSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from django.db.models import Q
 
 # Create your views here.
 @api_view(["GET", "POST"])
@@ -29,7 +30,7 @@ def articles(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def note_detail(request, slug):
+def article_detail(request, slug):
     try:
         article = Article.objects.get(slug=slug)
     except Article.DoesNotExist:
@@ -49,6 +50,14 @@ def note_detail(request, slug):
     elif request.method == 'DELETE':
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def articles_search(request):
+    query = request.query_params.get("search")
+    articles = Article.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(category__icontains=query))
+    serializer = ArticleSerializer(articles, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # def login_view(request):
 #     if request.method == "POST":

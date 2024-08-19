@@ -1,7 +1,7 @@
 CATEGORIES = [
     "Personal",
     "Sports",
-    "Books",
+    "Literature",
     "Cinema"
 ]
 

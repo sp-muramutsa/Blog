@@ -4,7 +4,11 @@ from .models import Article, Reader, Author, Comment
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ["id", "author", "title", "content", "category", "likes", "created_at", "updated_at"]
+        fields = '__all__'
+        extra_kwargs = {
+            'author': {'required': False}
+        }
+        fields = ["id", "title", "slug", "author", "content", "category", "likes", "created_at", "updated_at"]
 
 class ReaderSerializer(serializers.ModelSerializer):
     class Meta:
