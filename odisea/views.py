@@ -5,7 +5,6 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .forms import ArticleForm
 
 from .models import Article
 from .serializers import ArticleSerializer
@@ -20,7 +19,7 @@ def articles(request):
     if request.method == "GET":
         articles = Article.objects.all()
         serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == "POST":
         serializer = ArticleSerializer(data=request.data)

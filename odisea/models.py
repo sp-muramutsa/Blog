@@ -57,11 +57,10 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             # Generate initial slug
-            slug_base = slugify(self.title)
-            slug = slug_base
+            slug = slugify(self.title)
             # Check if the slug is unique and modify it if necessary
             if Article.objects.filter(slug=slug).exists():
-                slug = f'{slug_base}-{get_random_string(5)}'
+                slug = f'{slug}-{get_random_string(5)}'
             self.slug = slug
         super(Article, self).save(*args, **kwargs)
     
