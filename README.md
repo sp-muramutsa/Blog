@@ -11,4 +11,4 @@ The application consists of the following models:
 
 ## URL Endpoints
 1. **articles/**
-2. **articles/<slug:slug>**  
+2. **articles/slug**  
